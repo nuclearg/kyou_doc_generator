@@ -69,7 +69,7 @@ public abstract class AnnotatedClassProcessor implements Processor {
 
         String LN = SystemUtils.LINE_SEPARATOR;
 
-        builder.append("#### Ê¾Àý£º").append(LN);
+        builder.append("#### Ê¾Àý").append(LN);
         builder.append(LN);
 
         String[] examples = StringUtils.splitByWholeSeparator(exampleStr, ClassInfo.DOC_ITEM_DELIMITER);

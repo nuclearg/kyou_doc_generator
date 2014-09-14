@@ -81,6 +81,10 @@ public class ExprProcessor extends AnnotatedClassProcessor {
         }
 
         super.buildExample(info, builder);
+        
+        builder.append("#### 相关链接").append(LN);
+        builder.append(LN);
+        builder.append("_回到[[全部表达式列表]]_");
 
         return new Output("[Expr] " + tag, builder.toString());
     }

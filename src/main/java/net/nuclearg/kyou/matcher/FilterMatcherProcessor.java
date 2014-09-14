@@ -48,6 +48,10 @@ public class FilterMatcherProcessor extends AnnotatedClassProcessor {
         }
 
         super.buildExample(info, builder);
+        
+        builder.append("#### 相关链接").append(LN);
+        builder.append(LN);
+        builder.append("_回到[[全部匹配器列表]]_");
 
         return new Output("[Filter] " + name, builder.toString());
     }
