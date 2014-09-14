@@ -27,6 +27,7 @@ public class MatcherListProcessor implements PostProcessor {
         builder.append("* [[基于绝对路径的匹配器]]").append(LN);
         builder.append("* [[基于节点类型的匹配器]]").append(LN);
         builder.append("* [[基于节点名称的匹配器]]").append(LN);
+        builder.append(LN);
 
         builder.append("#### 管道匹配器").append(LN);
         builder.append(LN);
