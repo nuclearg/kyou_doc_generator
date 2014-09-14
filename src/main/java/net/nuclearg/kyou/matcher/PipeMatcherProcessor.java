@@ -25,7 +25,7 @@ public class PipeMatcherProcessor extends AnnotatedClassProcessor {
         StringBuilder builder = new StringBuilder();
         String LN = System.lineSeparator();
 
-        builder.append("> {left}**").append(tag).append("**{right} -- _").append(name).append("_").append(LN);
+        builder.append("> {left}").append(tag).append("{right}").append(LN);
         builder.append(LN);
         builder.append(desc).append(LN);
         builder.append(LN);

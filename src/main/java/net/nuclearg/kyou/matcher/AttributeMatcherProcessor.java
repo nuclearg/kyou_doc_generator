@@ -25,7 +25,7 @@ public class AttributeMatcherProcessor extends AnnotatedClassProcessor {
         StringBuilder builder = new StringBuilder();
         String LN = System.lineSeparator();
 
-        builder.append("> [attr**").append(tag).append("**'value'] -- _").append(name).append("_").append(LN);
+        builder.append("> [attr").append(tag).append("'value']").append(LN);
         builder.append(LN);
         builder.append(desc).append(LN);
         builder.append(LN);
