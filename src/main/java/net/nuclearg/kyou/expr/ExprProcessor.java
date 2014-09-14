@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.nuclearg.kyou.AnnotatedClassProcessor;
 import net.nuclearg.kyou.ClassInfo;
+import net.nuclearg.kyou.LinkInfo;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -68,9 +69,8 @@ public class ExprProcessor extends AnnotatedClassProcessor {
                     String fieldType = field.get("type");
                     String fieldDesc = fieldDescMap.get(fieldName);
 
-                    builder.append("* ").append(fieldName).append(" _(").append(fieldType).append(")_").append(LN);
-                    builder.append(LN);
-                    builder.append("    ").append(fieldDesc).append(LN);
+                    builder.append("* ").append(fieldName).append(" _(").append(fieldType).append(")_ <br/>").append(LN);
+                    builder.append(fieldDesc).append(LN);
                     builder.append(LN);
                 }
             }
@@ -81,12 +81,15 @@ public class ExprProcessor extends AnnotatedClassProcessor {
         }
 
         super.buildExample(info, builder);
-        
+
         builder.append("#### 相关链接").append(LN);
         builder.append(LN);
         builder.append("_回到[[全部表达式列表]]_");
 
-        return new Output("[Expr] " + tag, builder.toString());
+        String pageName = "[表达式] " + tag;
+        ExprListProcessor.exprLinks.add(new LinkInfo(pageName, desc));
+
+        return new Output(pageName, builder.toString());
     }
 
 }

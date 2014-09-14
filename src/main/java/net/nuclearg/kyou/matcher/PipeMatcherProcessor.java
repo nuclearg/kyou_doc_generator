@@ -2,6 +2,7 @@ package net.nuclearg.kyou.matcher;
 
 import net.nuclearg.kyou.AnnotatedClassProcessor;
 import net.nuclearg.kyou.ClassInfo;
+import net.nuclearg.kyou.LinkInfo;
 
 public class PipeMatcherProcessor extends AnnotatedClassProcessor {
 
@@ -35,7 +36,10 @@ public class PipeMatcherProcessor extends AnnotatedClassProcessor {
         builder.append(LN);
         builder.append("_回到[[全部匹配器列表]]_");
 
-        return new Output("[Pipe] " + name, builder.toString());
+        String pageName = "[管道匹配器] " + name;
+        MatcherListProcessor.pipeMatchers.add(new LinkInfo(pageName, desc));
+
+        return new Output(pageName, builder.toString());
     }
 
 }

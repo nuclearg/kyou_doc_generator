@@ -2,6 +2,7 @@ package net.nuclearg.kyou.matcher;
 
 import net.nuclearg.kyou.AnnotatedClassProcessor;
 import net.nuclearg.kyou.ClassInfo;
+import net.nuclearg.kyou.LinkInfo;
 
 public class FilterMatcherProcessor extends AnnotatedClassProcessor {
 
@@ -40,7 +41,7 @@ public class FilterMatcherProcessor extends AnnotatedClassProcessor {
         builder.append(LN);
         builder.append(desc).append(LN);
         builder.append(LN);
-        builder.append("* 参数 _(").append(paramType).append(")_").append(LN);
+        builder.append("#### 参数 _(").append(paramType).append(")_").append(LN);
         builder.append(LN);
         if (paramDesc != null) {
             builder.append(paramDesc);
@@ -48,12 +49,15 @@ public class FilterMatcherProcessor extends AnnotatedClassProcessor {
         }
 
         super.buildExample(info, builder);
-        
+
         builder.append("#### 相关链接").append(LN);
         builder.append(LN);
         builder.append("_回到[[全部匹配器列表]]_");
 
-        return new Output("[Filter] " + name, builder.toString());
+        String pageName = "[过滤匹配器] " + name;
+        MatcherListProcessor.filterMatchers.add(new LinkInfo(pageName, desc));
+
+        return new Output(pageName, builder.toString());
     }
 
 }

@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.nuclearg.kyou.expr.ExprListProcessor;
 import net.nuclearg.kyou.expr.ExprProcessor;
 import net.nuclearg.kyou.matcher.AttributeMatcherProcessor;
 import net.nuclearg.kyou.matcher.FilterMatcherProcessor;
+import net.nuclearg.kyou.matcher.MatcherListProcessor;
 import net.nuclearg.kyou.matcher.PipeMatcherProcessor;
 
 public class Main {
@@ -24,16 +26,24 @@ public class Main {
         else
             dstDir = new File(args[1]);
 
-        Processor[] processors = {
+        FileProcessor[] processors = {
                 new ExprProcessor(),
                 new AttributeMatcherProcessor(),
                 new FilterMatcherProcessor(),
                 new PipeMatcherProcessor() };
 
         for (File file : getFiles(srcDir))
-            for (Processor processor : processors)
+            for (FileProcessor processor : processors)
                 if (processor.supports(file))
                     processor.process(file, dstDir);
+
+        PostProcessor[] postProcessors = {
+                new ExprListProcessor(),
+                new MatcherListProcessor()
+        };
+
+        for (PostProcessor processor : postProcessors)
+            processor.process(dstDir);
     }
 
     private static List<File> getFiles(File file) {

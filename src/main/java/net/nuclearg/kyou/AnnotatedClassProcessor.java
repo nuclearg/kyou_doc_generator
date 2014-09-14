@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.SystemUtils;
 
-public abstract class AnnotatedClassProcessor implements Processor {
+public abstract class AnnotatedClassProcessor implements FileProcessor {
 
     @Override
     public boolean supports(File file) {
@@ -76,11 +76,11 @@ public abstract class AnnotatedClassProcessor implements Processor {
         for (String example : examples) {
             String[] lines = StringUtils.split(example, LN);
 
-            builder.append("* ").append(lines[0]).append(LN);
+            builder.append("* ").append(lines[0]).append("<br/>").append(LN);
             builder.append(LN);
 
             for (int i = 1; i < lines.length; i++)
-                builder.append("    ").append(lines[i]).append(LN).append(LN);
+                builder.append(lines[i]).append(LN).append(LN);
         }
     }
 }

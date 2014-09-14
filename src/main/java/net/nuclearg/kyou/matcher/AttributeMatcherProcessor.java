@@ -2,6 +2,7 @@ package net.nuclearg.kyou.matcher;
 
 import net.nuclearg.kyou.AnnotatedClassProcessor;
 import net.nuclearg.kyou.ClassInfo;
+import net.nuclearg.kyou.LinkInfo;
 
 public class AttributeMatcherProcessor extends AnnotatedClassProcessor {
 
@@ -35,7 +36,10 @@ public class AttributeMatcherProcessor extends AnnotatedClassProcessor {
         builder.append(LN);
         builder.append("_回到[[全部匹配器列表]]_");
 
-        return new Output("[Attr] " + name, builder.toString());
+        String pageName = "[属性匹配器] " + name;
+        MatcherListProcessor.attrMatchers.add(new LinkInfo(pageName, desc));
+
+        return new Output(pageName, builder.toString());
     }
 
 }
