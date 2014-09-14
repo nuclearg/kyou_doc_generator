@@ -1,0 +1,37 @@
+package net.nuclearg.kyou.matcher;
+
+import net.nuclearg.kyou.AnnotatedClassProcessor;
+import net.nuclearg.kyou.ClassInfo;
+
+public class AttributeMatcherProcessor extends AnnotatedClassProcessor {
+
+    @Override
+    protected String path() {
+        return "matcher/attribute";
+    }
+
+    @Override
+    protected String annotationClassName() {
+        return "OperatorDescription";
+    }
+
+    @Override
+    protected Output process(ClassInfo info) {
+        String tag = info.annotationValues.get("value");
+        String name = info.className;
+        String desc = info.docEntries.get("");
+
+        StringBuilder builder = new StringBuilder();
+        String LN = System.lineSeparator();
+
+        builder.append("> [attr**").append(tag).append("**'value'] -- _").append(name).append("_").append(LN);
+        builder.append(LN);
+        builder.append(desc).append(LN);
+        builder.append(LN);
+
+        super.buildExample(info, builder);
+
+        return new Output("[Attr] " + name, builder.toString());
+    }
+
+}

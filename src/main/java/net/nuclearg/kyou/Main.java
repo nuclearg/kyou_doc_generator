@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.nuclearg.kyou.expr.ExprProcessor;
+import net.nuclearg.kyou.matcher.AttributeMatcherProcessor;
+import net.nuclearg.kyou.matcher.FilterMatcherProcessor;
+import net.nuclearg.kyou.matcher.PipeMatcherProcessor;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         File srcDir;
@@ -19,7 +24,11 @@ public class Main {
         else
             dstDir = new File(args[1]);
 
-        Processor[] processors = { new ExprProcessor() };
+        Processor[] processors = {
+                new ExprProcessor(),
+                new AttributeMatcherProcessor(),
+                new FilterMatcherProcessor(),
+                new PipeMatcherProcessor() };
 
         for (File file : getFiles(srcDir))
             for (Processor processor : processors)

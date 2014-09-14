@@ -1,0 +1,16 @@
+package net.nuclearg.kyou.expr;
+
+class ExprComplexFieldDescription {
+    /**
+     * √˚≥∆
+     */
+    String name;
+    /**
+     * ¿‡–Õ
+     */
+    String type;
+    /**
+     * √Ë ˆ
+     */
+    String desc;
+}
