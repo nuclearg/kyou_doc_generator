@@ -2,6 +2,7 @@ package net.nuclearg.kyou;
 
 import japa.parser.JavaParserHelper;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.ArrayInitializerExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.FieldAccessExpr;
 import japa.parser.ast.expr.IntegerLiteralExpr;
@@ -31,9 +32,11 @@ public class ClassInfo {
     public final Map<String, String> docEntries;
 
     public final Map<String, String> annotationValues;
+    public final Map<String, List<Map<String, String>>> annotationSubValues;
 
     public final AnnotationExpr annotationExpr;
 
+    @SuppressWarnings("unchecked")
     public ClassInfo(File file) {
         try {
             /*
@@ -92,17 +95,29 @@ public class ClassInfo {
              */
             if (info.annotation == null) {
                 this.annotationValues = Collections.emptyMap();
+                this.annotationSubValues = Collections.emptyMap();
                 this.annotationExpr = null;
             } else {
                 Map<String, String> annotationValues = new LinkedHashMap<>();
+                Map<String, List<Map<String, String>>> annotationSubValues = new LinkedHashMap<>();
                 if (info.annotation instanceof NormalAnnotationExpr)
-                    for (MemberValuePair pair : ((NormalAnnotationExpr) info.annotation).getPairs())
-                        annotationValues.put(pair.getName(), getExprValue(pair.getValue()));
+                    for (MemberValuePair pair : ((NormalAnnotationExpr) info.annotation).getPairs()) {
+                        Object value = getExprValue(pair.getValue());
+                        if (value instanceof String)
+                            annotationValues.put(pair.getName(), (String) getExprValue(pair.getValue()));
+                        else
+                            annotationSubValues.put(pair.getName(), (List<Map<String, String>>) value);
+                    }
                 else {
                     SingleMemberAnnotationExpr annotationExpr = (SingleMemberAnnotationExpr) info.annotation;
-                    annotationValues.put("value", getExprValue(annotationExpr.getMemberValue()));
+                    Object value = getExprValue(annotationExpr.getMemberValue());
+                    if (value instanceof String)
+                        annotationValues.put("value", (String) value);
+                    else
+                        annotationSubValues.put("value", (List<Map<String, String>>) value);
                 }
                 this.annotationValues = Collections.unmodifiableMap(annotationValues);
+                this.annotationSubValues = Collections.unmodifiableMap(annotationSubValues);
                 this.annotationExpr = info.annotation;
             }
         } catch (Exception ex) {
@@ -153,13 +168,27 @@ public class ClassInfo {
         }
     }
 
-    private String getExprValue(Expression expr) {
+    private Object getExprValue(Expression expr) {
         if (expr instanceof StringLiteralExpr)
             return ((StringLiteralExpr) expr).getValue();
         if (expr instanceof IntegerLiteralExpr)
             return ((IntegerLiteralExpr) expr).getValue();
         if (expr instanceof FieldAccessExpr)
             return ((FieldAccessExpr) expr).getField();
+        if (expr instanceof ArrayInitializerExpr) {
+            ArrayInitializerExpr arrayInitExpr = (ArrayInitializerExpr) expr;
+            List<Map<String, String>> fields = new ArrayList<>();
+            for (Expression subExpr : arrayInitExpr.getValues()) {
+                Map<String, String> map = new LinkedHashMap<>();
+
+                for (MemberValuePair pair : ((NormalAnnotationExpr) subExpr).getPairs())
+                    map.put(pair.getName(), (String) getExprValue(pair.getValue()));
+
+                fields.add(Collections.unmodifiableMap(map));
+            }
+
+            return Collections.unmodifiableList(fields);
+        }
         return null;
     }
 }

@@ -1,7 +1,12 @@
 package net.nuclearg.kyou.expr;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.nuclearg.kyou.AnnotatedClassProcessor;
 import net.nuclearg.kyou.ClassInfo;
+
+import org.apache.commons.lang.StringUtils;
 
 public class ExprProcessor extends AnnotatedClassProcessor {
 
@@ -45,20 +50,35 @@ public class ExprProcessor extends AnnotatedClassProcessor {
         builder.append("#### 后缀 _(").append(postfixType).append(")_").append(LN);
         builder.append(LN);
         if (postfixDesc != null) {
-            builder.append(postfixDesc);
-            builder.append(LN);
-        }
+            // 判断是不是有多个后缀
+            if (postfixType.equals("Complex")) {
+                // 解析doc
+                Map<String, String> fieldDescMap = new HashMap<>();
+                for (String fieldDesc : StringUtils.splitByWholeSeparator(info.docEntries.get("postfix"), ClassInfo.DOC_ITEM_DELIMITER)) {
+                    int pos = fieldDesc.indexOf(' ');
+                    String n = fieldDesc.substring(0, pos);
+                    String v = fieldDesc.substring(pos + 1);
 
-        // if (this.complexPostfixFields == null) {
-        // builder.append(postfixDesc).append(LN);
-        // builder.append(LN);
-        // } else
-        // for (ExprComplexFieldDescription field : this.complexPostfixFields.values()) {
-        // builder.append("* ").append(field.name).append(" _(").append(field.type).append(")_").append(LN);
-        // builder.append(LN);
-        // builder.append("    ").append(field.desc).append(LN);
-        // builder.append(LN);
-        // }
+                    fieldDescMap.put(n, v);
+                }
+
+                // 解析annotation
+                for (Map<String, String> field : info.annotationSubValues.get("complexPostfixFields")) {
+                    String fieldName = field.get("name");
+                    String fieldType = field.get("type");
+                    String fieldDesc = fieldDescMap.get(fieldName);
+
+                    builder.append("* ").append(fieldName).append(" _(").append(fieldType).append(")_").append(LN);
+                    builder.append(LN);
+                    builder.append("    ").append(fieldDesc).append(LN);
+                    builder.append(LN);
+                }
+            }
+            else {
+                builder.append(postfixDesc);
+                builder.append(LN);
+            }
+        }
 
         super.buildExample(info, builder);
 
