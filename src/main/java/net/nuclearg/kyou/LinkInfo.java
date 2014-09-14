@@ -17,7 +17,7 @@ public class LinkInfo {
     @Override
     public String toString() {
         String LN = SystemUtils.LINE_SEPARATOR;
-        return "* [" + this.name + "](" + this.url + ")" + LN + LN + "    " + desc + LN + LN;
+        return "* [" + this.name + "](" + this.url + ") <br/>" + LN + desc + LN + LN;
     }
 
     private static String name(String pageName) {
